@@ -48,7 +48,7 @@ void insert(int key, int val) {
 bucket_entry * retrieve(int key) {
   bucket_entry *b;
   for (b = table[key % NUM_BUCKETS]; b != NULL; b = b->next) {
-    if (b->key == key) return b;
+    if (b->key == key) return b;gc
   }
   return NULL;
 }

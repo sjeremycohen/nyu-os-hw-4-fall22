@@ -9,7 +9,7 @@
 #define NUM_KEYS 100000   // Number of keys inserted per thread
 int num_threads = 1;      // Number of threads (configurable)
 int keys[NUM_KEYS];
-pthread_mutex_t mutex[NUM_BUCKETS];
+pthread_rwlock_t rwlock[NUM_BUCKETS];
 
 typedef struct _bucket_entry {
   int key;
@@ -35,12 +35,12 @@ void insert(int key, int val) {
   int i = key % NUM_BUCKETS;
   bucket_entry *e = (bucket_entry *) malloc(sizeof(bucket_entry));
   if (!e) panic("No memory to allocate bucket!");
-  pthread_mutex_lock(&mutex[i]);
+  pthread_rwlock_wrlock(&rwlock[i]);
   e->next = table[i];
   e->key = key;
   e->val = val;
   table[i] = e;
-  pthread_mutex_unlock(&mutex[i]);
+  pthread_rwlock_unlock(&rwlock[i]);
 }
 
 // Retrieves an entry from the hash table by key
@@ -95,9 +95,9 @@ int main(int argc, char **argv) {
   for (i = 0; i < NUM_KEYS; i++)
     keys[i] = random();
 
- // Initialize mutex locks for all buckets
+ // Initialize rwlock locks for all buckets
   for (int i = 0; i < NUM_BUCKETS; i ++)
-        pthread_mutex_init(&mutex[i], NULL);
+        pthread_rwlock_init(&rwlock[i], NULL);
 
   threads = (pthread_t *) malloc(sizeof(pthread_t)*num_threads);
   if (!threads) {
