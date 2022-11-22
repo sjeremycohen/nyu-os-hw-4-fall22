@@ -9,4 +9,4 @@ Based on the above, we would estimate that the true additional overhead of the m
 
 It is worth noting that retrieval is completely unaltered!
 
-![Time Comparison](/repository/screens/part_2_time_comp.png?raw=true alt="Time Comparison" title="Time Comparison")
+![Time Comparison](./screens/part_2_time_comp.png)
