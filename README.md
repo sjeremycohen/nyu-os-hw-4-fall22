@@ -19,11 +19,14 @@ As you can see from our time results below, spinlocks operate much, much more sl
 ![Time Comparison](./screens/part_3_time_comparison.png)
 
 ## Part 4 - Parallel Mutex Retrievals
-
+Retrievals do not require mutex locks. As there is no data modification occurring, even if threads read the same address they will return the same key, resulting in no data loss.
 
 ## Part 5 - Parallel Mutex Inserts
 
-We can improve on the performance of the mutex implementation by parallelizing our threads. The original code is kind enough to include buckets already and a helpful hint to use them. So this is exactly what we did, initializing an array of mutex locks over 5 buckets of the key table.
+We can improve on the performance of the mutex implementation by parallelizing our threads. The original code is kind enough to include buckets already and a helpful hint to use them. So this is exactly what we did, treating the key array as 5 buckets of values and initializing an array of mutex locks to hold one lock for each bucket.
+
+In part 2, we added `pthread_mutex_t mutex` to store our mutex lock. We modify this to be an array of mutex locks `pthread_mutex_t mutex[NUM_BUCKETS]` and consequently alter the insert statement to use the lock for the given bucket instead of the singular lock, and the intialization statement to initialize the full array of locks.
+
 
 Using the original 5 buckets provided, our parallel implementation produces a modest improvement of about 20% over the regular mutex implementation at most reasonable thread counts.
 
