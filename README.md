@@ -14,7 +14,7 @@ MacOS's command line tools don't include the original spinlock implementation (a
 
 We would expect spinlocks to operate more slowly than mutexes. If a thread hits a mutex lock, it will be put to sleep until woken up, which allows other threads to operate. A thread that hits a spinlock on the other hand will continuously retry until it finally succeeds, which continues consuming CPU resources and doesn't allow another thread to run.
 
-As you can see from our time results below, spinlocks operate much, much more slowly than mutexes- as soon as we have more than one thread they take longer. For 2 threads, this is nearly 20x the time of the original implementation (6x mutexes)
+As you can see from our time results below, spinlocks operate much, much more slowly than mutexes- as soon as we have more than one thread they take longer. For 16 threads, this is roughly 10x the time of the mutex implementation!
 
 ![Time Comparison](./screens/part_3_time_comparison.png)
 
